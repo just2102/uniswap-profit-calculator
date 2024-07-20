@@ -22,7 +22,7 @@ npx hardhat chains
 
 ### Calculate Profit
 
-Calculates profit for a given account on a specified chain, with an optional parameter to ignore transactions with profit above a specified amount in USD.
+Calculates profit for a given account on a specified chain for a given period (currently fixed at 1 month), with a parameter to ignore transactions with profit above a specified amount in USD.
 
 ```shell
 npx hardhat calc --account {account} --chain {chain} --ignore {ignore}
@@ -50,7 +50,3 @@ npx hardhat calc --account {account} --chain {chain} --ignore {ignore}
 
 - `scripts/main.ts`: Contains the `calculateProfit` function to perform profit calculation.
 - `data/types.ts`: Defines the `SupportedChains` type and list.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
