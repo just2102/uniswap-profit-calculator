@@ -19,7 +19,7 @@ task("calc", "Calculate profit")
   )
   .addParam(
     "ignore",
-    "Ignore transactions with profit above this number in USD (optional, default 1000)",
+    "Ignore transactions with profit above this number in USD (recommended: 1000)",
   )
   .setAction(async (taskArgs) => {
     await calculateProfit(
