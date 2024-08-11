@@ -20,6 +20,8 @@ async function filterTransactions(
   const filteredTxs = await asyncFilter(transactions, async (tx) => {
     const conditions =
       tx.category !== "token swap" &&
+      tx.erc20_transfers.length > 0 &&
+      tx.native_transfers.length > 0 &&
       (tx.native_transfers.find((nativeTransfer) => {
         return nativeTransfer.from_address === uniswapPoolNftContract
       }) ||
