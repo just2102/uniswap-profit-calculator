@@ -66,7 +66,7 @@ async function filterTransactions(
 
       tokenToAmountMap.set(
         tx.erc20_transfers[0].token_symbol,
-        (tokenToAmountMap.get(tx.erc20_transfers[0].token_name) || 0) +
+        (tokenToAmountMap.get(tx.erc20_transfers[0].token_symbol) || 0) +
           parseFloat(tx.erc20_transfers[0].value_formatted),
       )
       tokenToAmountMap.set(
