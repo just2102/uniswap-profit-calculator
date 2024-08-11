@@ -16,6 +16,7 @@ async function filterTransactions(
   const uniswapPoolNftContract = getUniswapPoolNftContract(chain)
 
   let totalValueUsd = 0
+  const tokenToAmountMap = new Map<string, number>()
 
   const filteredTxs = await asyncFilter(transactions, async (tx) => {
     const conditions =
@@ -62,6 +63,18 @@ async function filterTransactions(
 
     if (txValueUsd1 + txValueUsd2 < ignoreProfitAbove) {
       totalValueUsd += txValueUsd1 + txValueUsd2
+
+      tokenToAmountMap.set(
+        tx.erc20_transfers[0].token_symbol,
+        (tokenToAmountMap.get(tx.erc20_transfers[0].token_name) || 0) +
+          parseFloat(tx.erc20_transfers[0].value_formatted),
+      )
+      tokenToAmountMap.set(
+        tx.native_transfers[0].token_symbol,
+        (tokenToAmountMap.get(tx.native_transfers[0].token_symbol) || 0) +
+          parseFloat(tx.native_transfers[0].value_formatted),
+      )
+
       return true
     }
 
@@ -71,6 +84,7 @@ async function filterTransactions(
   return {
     filteredTxs,
     totalValueUsd,
+    tokenToAmountMap,
   }
 }
 
