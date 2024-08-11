@@ -21,11 +21,13 @@ task("calc", "Calculate profit")
     "ignore",
     "Ignore transactions with profit above this number in USD (recommended: 1000)",
   )
+  .addParam("days", "Number of days to look back")
   .setAction(async (taskArgs) => {
     await calculateProfit(
       taskArgs.account,
       taskArgs.chain,
       Number(taskArgs.ignore),
+      Number(taskArgs.days),
     )
   })
 

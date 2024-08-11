@@ -14,6 +14,7 @@ async function calculateProfit(
   address: Address,
   chain: SupportedChains,
   ignoreProfitAbove: number,
+  numOfDays: number,
 ) {
   if (!process.env.MORALIS_KEY) throw new Error("Moralis key not found")
 
@@ -21,7 +22,7 @@ async function calculateProfit(
     apiKey: process.env.MORALIS_KEY,
   })
 
-  const txs = await getTransactions(address, chain)
+  const txs = await getTransactions(address, chain, numOfDays)
 
   const { filteredTxs, totalValueUsd, tokenToAmountMap } =
     await filterTransactions(txs, chain, ignoreProfitAbove)

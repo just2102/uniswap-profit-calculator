@@ -25,7 +25,7 @@ npx hardhat chains
 Calculates profit for a given account on a specified chain for a given period (currently fixed at 1 month), with a parameter to ignore transactions with profit above a specified amount in USD.
 
 ```shell
-npx hardhat calc --account {account} --chain {chain} --ignore {ignore}
+npx hardhat calc --account {account} --chain {chain} --ignore {ignore} --days {days}
 ```
 
 - `account`: Account address to calculate profit for.
