@@ -7,6 +7,7 @@
     "prettier": "^3.3.3"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "moralis": "^2.26.9",
     "viem": "^2.17.5"
   }
