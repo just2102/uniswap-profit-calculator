@@ -1,5 +1,6 @@
 export enum SupportedChains {
   ArbitrumOne = "ArbitrumOne",
+  Unichain = "Unichain",
 }
 
 interface NativeTransfer {
@@ -32,7 +33,7 @@ interface ERC20Transfer {
   verified_contract: boolean
 }
 
-export interface Transaction {
+export interface TransactionMoralis {
   hash: string
   nonce: string
   transaction_index: string

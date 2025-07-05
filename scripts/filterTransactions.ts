@@ -1,18 +1,25 @@
 import Moralis from "moralis"
 import {
+  getAlchemyChain,
   getChain,
   getUniswapPoolNftContract,
   getWETHAddress,
 } from "../data/const"
 import asyncFilter from "../utils/asyncFilter"
-import { SupportedChains, Transaction } from "../data/types"
+import { SupportedChains, TransactionMoralis } from "../data/types"
 import { toHex } from "viem"
+import { Alchemy, AssetTransfersResult } from "alchemy-sdk"
+const fs = require("fs")
 
-async function filterTransactions(
-  transactions: Transaction[],
-  chain: SupportedChains,
-  ignoreProfitAbove: number,
-) {
+export async function filterTransactionsMoralis({
+  transactions,
+  chain,
+  ignoreProfitAbove,
+}: {
+  transactions: TransactionMoralis[]
+  chain: SupportedChains
+  ignoreProfitAbove: number
+}) {
   const uniswapPoolNftContract = getUniswapPoolNftContract(chain)
 
   let totalValueUsd = 0
@@ -88,4 +95,54 @@ async function filterTransactions(
   }
 }
 
-export default filterTransactions
+export async function filterTransactionsAlchemy({
+  transactions,
+  chain,
+  ignoreProfitAbove,
+}: {
+  transactions: AssetTransfersResult[]
+  chain: SupportedChains
+  ignoreProfitAbove: number
+}) {
+  const tokenPrices = new Map<string, number>()
+  const network = getAlchemyChain(chain)
+  const alchemy = new Alchemy({
+    apiKey: process.env.ALCHEMY_KEY,
+    network,
+  })
+
+  const filteredByValue = transactions.filter((tx) => {
+    return tx.value && tx.value < ignoreProfitAbove
+  })
+
+  const result = {
+    totalValueUsd: 0,
+    tokenToAmountMap: new Map<string, number>(),
+  }
+
+  for (const tx of filteredByValue) {
+    if (!tx.value) continue
+    if (!tx.rawContract.address) continue
+    if (!tx.asset) continue
+
+    const tokenPriceUsd =
+      tokenPrices.get(tx.rawContract.address) ||
+      (
+        await alchemy.prices.getTokenPriceByAddress([
+          {
+            network,
+            address: tx.rawContract.address,
+          },
+        ])
+      ).data[0].prices[0].value
+    tokenPrices.set(tx.rawContract.address, Number(tokenPriceUsd))
+
+    result.totalValueUsd += tx.value * Number(tokenPriceUsd)
+    result.tokenToAmountMap.set(
+      tx.asset,
+      (result.tokenToAmountMap.get(tx.asset) || 0) + tx.value,
+    )
+  }
+
+  return result
+}
