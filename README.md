@@ -1,6 +1,6 @@
-# Uniswap V3 Pools Profit Calculator
+# Uniswap V3/V4 Pools Profit Calculator
 
-This project provides tools to calculate profits from Uniswap V3 pools, using Hardhat for task management and automation.
+This project provides tools to calculate profits from Uniswap V3 and V4 pools, using Hardhat for task management and automation.
 
 ## Installation
 
@@ -22,7 +22,7 @@ npx hardhat chains
 
 ### Calculate Profit
 
-Calculates profit for a given account on a specified chain for a given period (currently fixed at 1 month), with a parameter to ignore transactions with profit above a specified amount in USD.
+Calculates profit for a given account on a specified chain for a given period in days, with a parameter to ignore transactions with profit above a specified amount in USD.
 
 ```shell
 npx hardhat calc --account {account} --chain {chain} --ignore {ignore} --days {days}
