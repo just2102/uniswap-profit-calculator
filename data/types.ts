@@ -1,6 +1,7 @@
 export enum SupportedChains {
   ArbitrumOne = "ArbitrumOne",
   Unichain = "Unichain",
+  Base = "Base",
 }
 
 interface NativeTransfer {

@@ -50,8 +50,10 @@ export async function getAlchemyTransactions({
   const alchemy = new Alchemy({ apiKey, network: getAlchemyChain(chain) })
 
   const blockTimeSeconds = BlockTimes[chain]
+  if (!blockTimeSeconds) {
+    throw new Error(`Block time not found for chain ${chain}`)
+  }
   const totalSeconds = numOfDays * SECONDS_PER_DAY
-
   const currentBlock = await alchemy.core.getBlockNumber()
   const blocksMined = Math.floor(totalSeconds / blockTimeSeconds)
   const fromBlock = currentBlock - blocksMined
